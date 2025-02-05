@@ -3,7 +3,13 @@ import os
 from dados.usuarios import *
 
 app = Flask(__name__)
+#Login
+acesso = False
 codigo = 000000
+
+@app.route('/')
+def _():
+   return(redirect('/login'))
 
 @app.route('/login')
 def login():
@@ -12,12 +18,14 @@ def login():
 @app.route('/login/code')
 def login_code():
     global codigo
+    global acesso
     codigo = int(request.args.get('codigo'))
     if codigo in usuarios:
+        acesso = True
         if usuarios[codigo]["nome"] == '':
             return(render_template('login_nome.html'))
         else:
-            return('nome cadastrado')
+            return(redirect('/home'))
     else:
         return(redirect('/login'))
     
@@ -27,9 +35,20 @@ def login_nome():
 
 @app.route('/login/cad_nome')
 def cad_nome():
+    global acesso
     nome = str(request.args.get('nome'))
     usuarios[codigo]["nome"] = nome
-    return('nome cadastrado')
+    return(redirect('/home'))
+#fim login
+
+#home
+@app.route('/home')
+def home():
+    global acesso
+    if acesso:
+        return(render_template('home.html'))
+    else:
+        return(redirect('/login'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
