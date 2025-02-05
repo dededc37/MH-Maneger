@@ -23,11 +23,13 @@ html, body {
 main {
     background-color: rgba(0, 0, 255, 0.11);
     backdrop-filter: blur(10px);
+    border-radius: 20px;
     width: 90%;
     max-width: 600px;
     min-height: 300px;
     padding: 20px;
     color: white;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.541);
 }
 
 main > h1, main > p {
