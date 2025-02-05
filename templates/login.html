@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms/forms.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Bem vindo</h1>
+        <p>Informe seu código de acesso para prosseguir</p>
+        <form action="" method="get">
+            <div class="campo">
+                <label for="codigo"><span class="material-symbols-outlined">vpn_key</span></label>
+                <input type="number" id="codigo" name="codigo" required placeholder="000000" oninput="validarCodigo()">
+            </div>
+            <button type="submit" id="entrar" disabled>Entrar</button>
+        </form>
+    </main>
+
+    <script>
+        function validarCodigo() {
+            let input = document.getElementById("codigo");
+            let valor = input.value;
+            let botao = document.getElementById("entrar");
+
+            if (valor.length === 6) {
+                botao.disabled = false;
+            } else {
+                botao.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
