@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home/home.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <main>
-        <h1>Bem Vindo</h1>
-        <h2>{{ nome }}</h2>
+        <h1>Bem Vindo {{ nome }}</h1>
+        <p>Use o menu para navegar pelo sistema</p>
     </main>
+    <footer>
+        <a href=""><span class="material-symbols-outlined">category</span>Categorias</a>
+        <a href=""><span class="material-symbols-outlined">inventory_2</span>Produtos</a>
+        <a href=""><span class="material-symbols-outlined">list_alt</span>Estoque</a>
+        <a href=""><span class="material-symbols-outlined">checklist</span>Relatórios</a>
+    </footer>
 </body>
 </html>
