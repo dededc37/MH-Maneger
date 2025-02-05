@@ -46,9 +46,10 @@ def cad_nome():
 def home():
     global acesso
     if acesso:
-        return(render_template('home.html'))
+        return(render_template('home.html', nome = usuarios[codigo]['nome']))
     else:
         return(redirect('/login'))
+#fim home
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
