@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Exclusão</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='categorias/categorias_confirmar.css') }}">
+</head>
+<body>
+    <main>
+        <h1>Deseja Excluir</h1>
+        <h2>{{ categoria }}</h2>
+        <a href="/categorias/excluir/{{ pos }}" id="sim">Sim</a>
+        <a href="/categorias" id="nao">Não</a>
+    </main>
+</body>
+</html>

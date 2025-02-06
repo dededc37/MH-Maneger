@@ -1,6 +1,7 @@
 from flask import *
 import os
 from dados.usuarios import *
+from dados.categorias import *
 
 app = Flask(__name__)
 #Login
@@ -50,6 +51,35 @@ def home():
     else:
         return(redirect('/login'))
 #fim home
+
+#categorias
+@app.route('/categorias')
+def categorias_page():
+    return(render_template('categorias.html', categorias = categorias))
+
+@app.route('/categorias/criar')
+def categorias_criar():
+    return(render_template('categorias_criar.html'))
+
+@app.route('/categorias/salvar')
+def categorias_salvar():
+    global categorias
+    nome = str(request.args.get('nome'))
+    categorias.append(nome)
+    return(redirect('/categorias'))
+
+@app.route('/categorias/confirmar/<pos>')
+def categorias_confirmar(pos):
+    pos = int(pos)
+    categoria = categorias[pos]
+    return(render_template('categorias_confirmar.html', categoria = categoria, pos = pos))
+
+@app.route('/categorias/excluir/<pos>')
+def categorias_excluir(pos):
+    global categorias
+    pos = int(pos)
+    categorias.pop(pos)
+    return(redirect('/categorias'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
