@@ -11,6 +11,18 @@
 <body>
     <h1>Produtos</h1>
     <a href="/produtos/criar"><span class="material-symbols-outlined">library_add</span></a>
+    <div id="form">
+        <form action="/produtos" method="GET">
+            <input type="text" placeholder="Pesquisar por código ou nome..." name="search">
+            <select name="categoria">
+                <option value="todas" selected>Todas</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria }}">{{ categoria }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
     <main>
         {% for produto in produtos %}
             <div class="produto">
@@ -18,6 +30,7 @@
                     <p>{{ produto['nome'] }}</p>
                     <p>{{ produto['categoria'] }}</p>
                     <p>R$ {{ "%.2f"|format(produto['preco']) }}</p>
+                    <p>Código: {{ produto['codigo'] }}</p>
                 </div>
                 <div class="direita">
                     <a href="/produtos/editar/{{ produto['codigo'] }}"><span class="material-symbols-outlined">edit</span></a>

@@ -33,7 +33,7 @@ main {
     background-color: rgba(0, 0, 255, 0.11);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    width: 90%;
+    width: 100%;
     max-width: 600px;
     min-height: 250px;
     padding: 0px;
@@ -106,4 +106,46 @@ main > div.produto > div.direita > a:hover {
     background-color: white;
     color: #430081;
     border-radius: 50%;
+}
+
+div#form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.849);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+div#form > form > input, div#form > form > select, div#form > form > button {
+    box-sizing: border-box;
+    height: 50px;
+    margin: auto;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    width: 90%;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+}
+
+div#form > form > button {
+    transition-duration: 0.5s;
+    display: block;
+    background-color: green;
+    color: white;
+    font-weight: bolder;
+}
+
+div#form > form > button:hover {
+    background-color: rgb(189, 255, 189);
+    color: green;
+}
+
+div#form > form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
