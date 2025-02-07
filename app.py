@@ -86,7 +86,23 @@ def categorias_excluir(pos):
 #produtos
 @app.route('/produtos')
 def produtos_page():
-    return(render_template('produtos.html', produtos=produtos, categorias=categorias))
+    produtos_filtro = []
+    categoria = request.args.get('categoria')
+    search = request.args.get('search')
+    if categoria == 'todas' and search == '':
+        produtos_filtro = produtos
+    else:
+        if categoria != 'todas':
+            for produto in produtos:
+                if produto['categoria'] == categoria:
+                    produtos_filtro.append(produto)
+
+        if search != '':
+            for produto in produtos:
+                if produto['codigo'] == search:
+                    produtos_filtro.append(produto)
+
+    return(render_template('produtos.html', produtos=produtos_filtro, categorias=categorias))
 
 @app.route('/produtos/criar')
 def produtos_criar():
@@ -108,7 +124,43 @@ def produtos_salvar():
     }
 
     produtos.append(produto)
+    return(redirect('/produtos?search=&categoria=todas'))
+
+@app.route('/produtos/editar/<code>')
+def produtos_editar(code):
+    produto_edit = {}
+    for produto in produtos:
+        if produto['codigo'] == code:
+            produto_edit = {
+                'nome': produto['nome'],
+                'categoria': produto['categoria'],
+                'preco': produto['preco'],
+                'codigo': produto['codigo']
+            }
+            break
+    return(render_template('produtos_editar.html', produto_edit=produto_edit, categorias=categorias, code=code))
+
+@app.route('/produtos/editar/salvar/<code>')
+def produtos_editar_salvar(code):
+    global produtos
+    nome = request.args.get('nome')
+    preco_str = request.args.get('preco')
+    preco_float = float(preco_str.replace(',', '.'))
+    codigo = request.args.get('codigo')
+    categoria = request.args.get('categoria')
+    produto_novo = {
+        'nome': nome,
+        'categoria': categoria,
+        'preco': preco_float,
+        'codigo': codigo
+    }
+    for produto in produtos:
+        if produto['codigo'] == code:
+            produto = produto_novo
+            break
     return(redirect('/produtos'))
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)

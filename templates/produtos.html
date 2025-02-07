@@ -13,7 +13,7 @@
     <a href="/produtos/criar"><span class="material-symbols-outlined">library_add</span></a>
     <div id="form">
         <form action="/produtos" method="GET">
-            <input type="text" placeholder="Pesquisar por código ou nome..." name="search">
+            <input type="text" placeholder="Pesquisar por código..." name="search">
             <select name="categoria">
                 <option value="todas" selected>Todas</option>
                 {% for categoria in categorias %}
