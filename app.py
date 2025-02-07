@@ -88,5 +88,27 @@ def categorias_excluir(pos):
 def produtos_page():
     return(render_template('produtos.html', produtos=produtos, categorias=categorias))
 
+@app.route('/produtos/criar')
+def produtos_criar():
+    return(render_template('produtos_criar.html', categorias=categorias))
+
+@app.route('/produtos/salvar')
+def produtos_salvar():
+    global produtos
+    nome = request.args.get('nome')
+    preco_str = request.args.get('preco')
+    preco_float = float(preco_str.replace(',', '.'))
+    codigo = request.args.get('codigo')
+    categoria = request.args.get('categoria')
+    produto = {
+        'nome': nome,
+        'categoria': categoria,
+        'preco': preco_float,
+        'codigo': codigo
+    }
+
+    produtos.append(produto)
+    return(redirect('/produtos'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)

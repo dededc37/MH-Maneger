@@ -73,7 +73,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-div.campo > input {
+div.campo > input, div.campo > select {
     box-sizing: border-box;
     font-size: 1em;
     width: 100%;

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Categoria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms/forms.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <h1>Criar Novo Produto</h1>
+        <form action="/produtos/salvar" method="get">
+            <div class="campo">
+                <label for="nome">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                </label>
+                <input type="text" id="nome" name="nome" required placeholder="nome">
+            </div>
+
+            <div class="campo">
+                <label for="preco">
+                    <span class="material-symbols-outlined">payments</span>
+                </label>
+                <input type="text" id="preco" name="preco" required placeholder="00,00" pattern="^\d{1,2}(\,\d{1,2})?$" title="Insira um valor monetário válido" oninput="formatarPreco(this)">                
+            </div>
+
+            <div class="campo">
+                <label for="codigo">
+                    <span class="material-symbols-outlined">barcode</span>
+                </label>
+                <input type="text" id="codigo" name="codigo" required placeholder="código">
+            </div>
+
+            <div class="campo">
+                <label for="categoria">
+                    <span class="material-symbols-outlined">category</span>
+                </label>
+                <select id="categoria" name="categoria" required>
+                    <option value="" disabled selected>Selecionar categoria</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria }}">{{ categoria }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <button type="submit">Criar</button>
+        </form>
+    </main>
+
+    <script>
+        function formatarPreco(input) {
+    let valor = input.value.replace(/[^\d]/g, '');
+
+    if (valor.length <= 2) {
+        valor = '' + valor;
+    }
+
+    let parteInteira = valor.slice(0, -2);
+    let parteDecimal = valor.slice(-2);
+
+    input.value = parteInteira + ',' + parteDecimal;
+}
+    </script>
+</body>
+</html>
