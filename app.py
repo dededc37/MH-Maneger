@@ -158,7 +158,7 @@ def produtos_editar_salvar(code):
         if produto['codigo'] == code:
             produtos[pos] = produto_novo
             break
-    return(redirect('/produtos'))
+    return(redirect('/produtos?search=&categoria=todas'))
 
 
 
