@@ -49,5 +49,19 @@
             <button type="submit">Editar</button>
         </form>
     </main>
+   <script>
+        function formatarPreco(input) {
+    let valor = input.value.replace(/[^\d]/g, '');
+
+    if (valor.length <= 2) {
+        valor = '' + valor;
+    }
+
+    let parteInteira = valor.slice(0, -2);
+    let parteDecimal = valor.slice(-2);
+
+    input.value = parteInteira + ',' + parteDecimal;
+}
+    </script>
 </body>
 </html>
