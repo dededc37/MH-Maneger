@@ -2,6 +2,7 @@ from flask import *
 import os
 from dados.usuarios import *
 from dados.categorias import *
+from dados.produtos import *
 
 app = Flask(__name__)
 #Login
@@ -80,6 +81,12 @@ def categorias_excluir(pos):
     pos = int(pos)
     categorias.pop(pos)
     return(redirect('/categorias'))
+#fim categorias
+
+#produtos
+@app.route('/produtos')
+def produtos_page():
+    return(render_template('produtos.html', produtos=produtos))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
