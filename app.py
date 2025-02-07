@@ -154,9 +154,9 @@ def produtos_editar_salvar(code):
         'preco': preco_float,
         'codigo': codigo
     }
-    for produto in produtos:
+    for pos, produto in enumerate(produtos):
         if produto['codigo'] == code:
-            produto = produto_novo
+            produtos[pos] = produto_novo
             break
     return(redirect('/produtos'))
 
