@@ -123,11 +123,13 @@ def produtos_salvar():
     preco_float = float(preco_str.replace(',', '.'))
     codigo = request.args.get('codigo')
     categoria = request.args.get('categoria')
+    estoque = 0
     produto = {
         'nome': nome,
         'categoria': categoria,
         'preco': preco_float,
-        'codigo': codigo
+        'codigo': codigo,
+        'estoque': estoque
     }
 
     produtos.append(produto)
@@ -142,7 +144,8 @@ def produtos_editar(code):
                 'nome': produto['nome'],
                 'categoria': produto['categoria'],
                 'preco': produto['preco'],
-                'codigo': produto['codigo']
+                'codigo': produto['codigo'],
+                'estoque': produto['estoque']
             }
             break
     return(render_template('produtos_editar.html', produto_edit=produto_edit, categorias=categorias, code=code))
@@ -159,10 +162,12 @@ def produtos_editar_salvar(code):
         'nome': nome,
         'categoria': categoria,
         'preco': preco_float,
-        'codigo': codigo
+        'codigo': codigo,
+        'estoque': 0
     }
     for pos, produto in enumerate(produtos):
         if produto['codigo'] == code:
+            produto_novo['estoque'] = produto['estoque']
             produtos[pos] = produto_novo
             break
     return(redirect('/produtos?search=&categoria=todas'))
