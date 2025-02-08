@@ -11,7 +11,10 @@ codigo = 000000
 
 @app.route('/')
 def _():
-   return(redirect('/login'))
+   if acesso:
+        return(redirect('/home'))
+   else:
+       return(redirect('/login'))
 
 @app.route('/login')
 def login():
@@ -56,7 +59,7 @@ def home():
 #categorias
 @app.route('/categorias')
 def categorias_page():
-    return(render_template('categorias.html', categorias = categorias))
+    return(render_template('categorias.html', categorias = categorias[1:]))
 
 @app.route('/categorias/criar')
 def categorias_criar():
@@ -71,14 +74,18 @@ def categorias_salvar():
 
 @app.route('/categorias/confirmar/<pos>')
 def categorias_confirmar(pos):
-    pos = int(pos)
+    pos = int(pos) + 1
     categoria = categorias[pos]
     return(render_template('categorias_confirmar.html', categoria = categoria, pos = pos))
 
 @app.route('/categorias/excluir/<pos>')
 def categorias_excluir(pos):
     global categorias
+    global produtos
     pos = int(pos)
+    for produto in produtos:
+        if produto['categoria'] == categorias[pos]:
+            produto['categoria'] = 'Sem Categoria'
     categorias.pop(pos)
     return(redirect('/categorias'))
 #fim categorias

@@ -1,1 +1,3 @@
-categorias = []
+categorias = [
+    'Sem Categoria'
+]
