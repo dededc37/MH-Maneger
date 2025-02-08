@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorias</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='produtos/produtos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estoque/estoque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <h1>Produtos</h1>
-    <a href="/produtos/criar"><span class="material-symbols-outlined">library_add</span></a>
+    <h1>Estoque</h1>
     <div id="form">
-        <form action="/produtos" method="GET">
+        <form action="/estoque" method="GET">
             <input type="text" placeholder="Pesquisar por código..." name="search">
             <select name="categoria">
                 <option value="todas" selected>Todas</option>
@@ -28,13 +27,12 @@
             <div class="produto">
                 <div class="esquerda">
                     <p>{{ produto['nome'] }}</p>
-                    <p>{{ produto['categoria'] }}</p>
-                    <p>R$ {{ "%.2f"|format(produto['preco']) }}</p>
                     <p>Código: {{ produto['codigo'] }}</p>
+                    <p>Estoque: {{ produto['estoque'] }}</p>
                 </div>
                 <div class="direita">
-                    <a href="/produtos/editar/{{ produto['codigo'] }}"><span class="material-symbols-outlined">edit</span></a>
-                    <a href="/produtos/confirmar/{{ produto['codigo'] }}"><span class="material-symbols-outlined">delete</span></a>
+                    <a href="/estoque/diminuir/{{ produto['codigo'] }}"><span class="material-symbols-outlined">remove</span></a>
+                    <a href="/estoque/aumentar/{{ produto['codigo'] }}"><span class="material-symbols-outlined">add</span></a>
                 </div>
             </div>
         {% endfor %}
@@ -42,8 +40,8 @@
     <footer>
         <footer>
             <a href="/categorias"><span class="material-symbols-outlined">category</span>Categorias</a>
-            <a href="/produtos?search=&categoria=todas" class="ativo"><span class="material-symbols-outlined">inventory_2</span>Produtos</a>
-            <a href="/estoque?search=&categoria=todas"><span class="material-symbols-outlined">list_alt</span>Estoque</a>
+            <a href="/produtos?search=&categoria=todas"><span class="material-symbols-outlined">inventory_2</span>Produtos</a>
+            <a href="/estoque?search=&categoria=todas" class="ativo"><span class="material-symbols-outlined">list_alt</span>Estoque</a>
             <a href=""><span class="material-symbols-outlined">checklist</span>Relatórios</a>
             <a href=""><span class="material-symbols-outlined">manufacturing</span>Config</a>
         </footer>

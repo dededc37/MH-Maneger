@@ -190,5 +190,62 @@ def produtos_excluir(codigo):
     return(redirect('/produtos?search=&categoria=todas'))
 #fim produtos
 
+#estoque
+@app.route('/estoque')
+def estoque_page():
+    produtos_filtro = []
+    categoria = request.args.get('categoria')
+    search = request.args.get('search')
+    if categoria == 'todas' and search == '':
+        produtos_filtro = produtos
+    else:
+        if categoria != 'todas':
+            for produto in produtos:
+                if produto['categoria'] == categoria:
+                    produtos_filtro.append(produto)
+
+        if search != '':
+            for produto in produtos:
+                if produto['codigo'] == search:
+                    produtos_filtro.append(produto)
+
+    return(render_template('estoque.html', produtos=produtos_filtro, categorias=categorias))
+
+@app.route('/estoque/diminuir/<codigo>')
+def estoque_diminuir(codigo):
+    global produtos
+    escolha = {}
+    for produto in produtos:
+        if produto['codigo'] == codigo:
+            escolha = produto
+    return(render_template('estoque_diminuir.html', produto = escolha))
+
+@app.route('/estoque/diminuir/salvar/<codigo>')
+def estoque_diminuir_salvar(codigo):
+    global produtos
+    diminuir = int(request.args.get('diminuir'))
+    for produto in produtos:
+        if produto['codigo'] == codigo:
+            produto['estoque'] -= diminuir
+    return(redirect('/estoque?search=&categoria=todas'))
+
+@app.route('/estoque/aumentar/<codigo>')
+def estoque_aumentar(codigo):
+    global produtos
+    escolha = {}
+    for produto in produtos:
+        if produto['codigo'] == codigo:
+            escolha = produto
+    return(render_template('estoque_aumentar.html', produto = escolha))
+
+@app.route('/estoque/aumentar/salvar/<codigo>')
+def estoque_aumentar_salvar(codigo):
+    global produtos
+    aumentar = int(request.args.get('aumentar'))
+    for produto in produtos:
+        if produto['codigo'] == codigo:
+            produto['estoque'] += aumentar
+    return(redirect('/estoque?search=&categoria=todas'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
