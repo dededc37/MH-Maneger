@@ -160,7 +160,23 @@ def produtos_editar_salvar(code):
             break
     return(redirect('/produtos?search=&categoria=todas'))
 
+@app.route('/produtos/confirmar/<codigo>')
+def produtos_confirmar(codigo):
+    nome = ''
+    for produto in produtos:
+        if produto['codigo'] == codigo:
+            nome = produto['nome']
+            break
+    return(render_template('produtos_confirmar.html', nome=nome, codigo=codigo))
 
+@app.route('/produtos/excluir/<codigo>')
+def produtos_excluir(codigo):
+    global produtos
+    for pos, produto in enumerate(produtos):
+        if produto['codigo'] == codigo:
+            produtos.pop(pos)
+    return(redirect('/produtos?search=&categoria=todas'))
+#fim produtos
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
