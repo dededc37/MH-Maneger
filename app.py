@@ -1,8 +1,10 @@
 from flask import *
 import os
+from datetime import datetime
 from dados.usuarios import *
 from dados.categorias import *
 from dados.produtos import *
+from dados.relatorios import *
 
 app = Flask(__name__)
 #Login
@@ -227,6 +229,8 @@ def estoque_diminuir_salvar(codigo):
     for produto in produtos:
         if produto['codigo'] == codigo:
             produto['estoque'] -= diminuir
+            registro_venda(produto=produto, qtd_vendida=diminuir)
+            break
     return(redirect('/estoque?search=&categoria=todas'))
 
 @app.route('/estoque/aumentar/<codigo>')
@@ -246,6 +250,31 @@ def estoque_aumentar_salvar(codigo):
         if produto['codigo'] == codigo:
             produto['estoque'] += aumentar
     return(redirect('/estoque?search=&categoria=todas'))
+#fim estoque
+
+#relatórios
+#Criação e armazenamento de relatórios
+def registro_venda(produto, qtd_vendida):
+    mes = datetime.now().strftime('%Y-%m')
+    categoria = produto['categoria']
+    nome = produto['nome']
+    preco = produto['preco']
+
+    if mes not in relatorios:
+        relatorios[mes] = {}
+
+    if categoria not in relatorios[mes]:
+        relatorios[mes][categoria] = {}
+
+    if nome not in relatorios[mes][categoria]:
+        relatorios[mes][categoria][nome] = {
+            'unidades_vendidas': 0,
+            'valor_arrecadado': 0.0,
+        }
+    
+    relatorios[mes][categoria][nome]["unidades_vendidas"] += qtd_vendida
+    relatorios[mes][categoria][nome]["valor_arrecadado"] += qtd_vendida * preco
+#fim criação e armazenamento de relatórios
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
