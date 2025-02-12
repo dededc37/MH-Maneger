@@ -275,6 +275,7 @@ def registro_venda(produto, qtd_vendida):
     relatorios[mes][categoria][nome]["unidades_vendidas"] += qtd_vendida
     relatorios[mes][categoria][nome]["valor_arrecadado"] += qtd_vendida * preco
 #fim criação e armazenamento de relatórios
+#fim relatorios
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
