@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='relatorios/relatorios.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+    <main>
+        {% for categoria, produtos in relatorio.items() %}
+            <div class="categoria">
+                <h2>{{ categoria }}</h2>
+                {% for produto, dados in produtos.items() %}
+                    <div class="produto">
+                        <h3>{{ produto }}</h3>
+                        <p>Unidades Vendidas: {{ dados.unidades_vendidas }}</p>
+                        <p>Valor Arrecadado: R$ {{ '%.2f' | format(dados.valor_arrecadado) }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </main>
+    <footer>
+        <a href="/categorias"><span class="material-symbols-outlined">category</span>Categorias</a>
+        <a href="/produtos?search=&categoria=todas"><span class="material-symbols-outlined">inventory_2</span>Produtos</a>
+        <a href="/estoque?search=&categoria=todas"><span class="material-symbols-outlined">list_alt</span>Estoque</a>
+        <a href="/relatorios" class="ativo"><span class="material-symbols-outlined">checklist</span>Relatórios</a>
+        <a href=""><span class="material-symbols-outlined">manufacturing</span>Config</a>
+    </footer>
+</body>
+</html>

@@ -262,6 +262,7 @@ def registro_venda(produto, qtd_vendida):
 
     if mes not in relatorios:
         relatorios[mes] = {}
+        meses_disponiveis.append(mes)
 
     if categoria not in relatorios[mes]:
         relatorios[mes][categoria] = {}
@@ -275,6 +276,20 @@ def registro_venda(produto, qtd_vendida):
     relatorios[mes][categoria][nome]["unidades_vendidas"] += qtd_vendida
     relatorios[mes][categoria][nome]["valor_arrecadado"] += qtd_vendida * preco
 #fim criação e armazenamento de relatórios
+#relatorios
+@app.route('/relatorios')
+def relatorios_page():
+    mes_escolhido = request.args.get('mes_escolhido', 'atual')
+    mes_atual = datetime.now().strftime('%Y-%m')
+    if mes_escolhido == 'atual':
+        relatorios_filtro = relatorios[mes_atual]
+    else:
+        relatorios_filtro = relatorios[mes_escolhido]
+    return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro))
+    
+
+
+
 #fim relatorios
 
 if __name__ == '__main__':

@@ -1,1 +1,2 @@
 relatorios = {}
+meses_disponiveis = []
