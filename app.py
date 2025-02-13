@@ -291,7 +291,12 @@ def relatorios_page():
             relatorios_filtro = relatorios[mes_escolhido]
         except:
             relatorios_filtro = {}
-    return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro))
+    total_arrecadado = sum(
+        dados["valor_arrecadado"]
+        for produtos in relatorios_filtro.values()
+        for dados in produtos.values()
+    )
+    return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro, total = total_arrecadado))
 #fim relatorios
 
 if __name__ == '__main__':

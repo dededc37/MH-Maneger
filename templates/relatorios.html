@@ -20,6 +20,7 @@
             <button type="submit">Filtrar</button>
         </form>
     </div>
+    <h1>Total Arrecadado: R$ {{ "%.2f"|format(total) }}</h1>
     <main>
         {% for categoria, produtos in relatorio.items() %}
             <div class="categoria">
