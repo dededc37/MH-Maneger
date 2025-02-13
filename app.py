@@ -282,14 +282,16 @@ def relatorios_page():
     mes_escolhido = request.args.get('mes_escolhido', 'atual')
     mes_atual = datetime.now().strftime('%Y-%m')
     if mes_escolhido == 'atual':
-        relatorios_filtro = relatorios[mes_atual]
+        try:
+            relatorios_filtro = relatorios[mes_atual]
+        except:
+            relatorios_filtro = {}
     else:
-        relatorios_filtro = relatorios[mes_escolhido]
+        try:
+            relatorios_filtro = relatorios[mes_escolhido]
+        except:
+            relatorios_filtro = {}
     return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro))
-    
-
-
-
 #fim relatorios
 
 if __name__ == '__main__':

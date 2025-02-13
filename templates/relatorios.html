@@ -9,6 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
+    <h1>Relatórios</h1>
+    <div id="form">
+        <form action="/relatorios" method="get">
+            <select name="mes_escolhido">
+                {% for mes in meses %}
+                    <option value="{{ mes }}">{{ mes }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
     <main>
         {% for categoria, produtos in relatorio.items() %}
             <div class="categoria">
