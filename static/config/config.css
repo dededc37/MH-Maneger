@@ -1,0 +1,181 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100dvh;
+    justify-content: center;
+    align-items: center;
+}
+
+html {
+    background: url(imgs/backgrond.jpg) no-repeat fixed;
+    background-size: cover;
+    background-position: center center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 255, 0.11);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    min-height: 250px;
+    padding: 0px;
+    color: white;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.541);
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 150px;
+}
+
+main > h1, main > h2, main > p {
+    text-align: center;
+}
+
+main > p {
+    font-size: 1.5em;
+}
+body > h1 {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.589);
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+
+body > a {
+    transition-duration: 0.5s;
+    display: block;
+    background-color: rgb(67, 0, 129);
+    color: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.603);
+    text-align: center;
+    font-size: 1.5em;
+}
+
+body > a:hover {
+    background-color: white;
+    color: #430081;
+}
+
+main > div.produto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.548);
+    box-sizing: border-box;
+    padding: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.411);
+}
+
+main > div.produto > div.direita > a {
+    transition-duration: 0.5s;
+    background-color: #430081;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+main > div.produto > div.direita > a:hover {
+    background-color: white;
+    color: #430081;
+    border-radius: 50%;
+}
+
+div#form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    background-color: rgba(0, 0, 0, 0.849);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+div#form > form > input, div#form > form > select, div#form > form > button {
+    box-sizing: border-box;
+    height: 50px;
+    margin: auto;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    width: 90%;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+}
+
+div#form > form > button {
+    transition-duration: 0.5s;
+    display: block;
+    background-color: green;
+    color: white;
+    font-weight: bolder;
+}
+
+div#form > form > button:hover {
+    background-color: rgb(189, 255, 189);
+    color: green;
+}
+
+div#form > form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+main > div {
+    background-color: #430081;
+    font-weight: bolder;
+    text-align: center;
+    box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.473);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 10px;
+}
+
+main > div > a {
+    transition-duration: 0.5s;
+    display: block;
+    background-color: white;
+    color: #430081;
+    margin: 10px;
+    border-radius: 15px;
+}
+
+main > div > a:hover {
+    background-color: #430081;
+    color: white;
+    border: 3px solid, white;
+}
+
+main > div.adm {
+    background-color: #E31463;
+}

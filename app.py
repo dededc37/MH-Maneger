@@ -1,6 +1,7 @@
 from flask import *
 import os
 from datetime import datetime
+from random import randint
 from dados.usuarios import *
 from dados.categorias import *
 from dados.produtos import *
@@ -9,6 +10,7 @@ from dados.relatorios import *
 app = Flask(__name__)
 #Login
 acesso = False
+adm = False
 codigo = 000000
 
 @app.route('/')
@@ -26,9 +28,12 @@ def login():
 def login_code():
     global codigo
     global acesso
+    global adm
     codigo = int(request.args.get('codigo'))
     if codigo in usuarios:
         acesso = True
+        if usuarios[codigo]['is_admin'] == True:
+            adm = True
         if usuarios[codigo]["nome"] == '':
             return(render_template('login_nome.html'))
         else:
@@ -53,7 +58,7 @@ def cad_nome():
 def home():
     global acesso
     if acesso:
-        return(render_template('home.html', nome = usuarios[codigo]['nome']))
+        return(render_template('home.html', nome = usuarios[codigo]['nome'], adm=adm))
     else:
         return(redirect('/login'))
 #fim home
@@ -61,14 +66,20 @@ def home():
 #categorias
 @app.route('/categorias')
 def categorias_page():
-    return(render_template('categorias.html', categorias = categorias[1:]))
+    if not acesso:
+        return(redirect('/login'))
+    return(render_template('categorias.html', categorias = categorias[1:], adm=adm))
 
 @app.route('/categorias/criar')
 def categorias_criar():
+    if not acesso:
+        return(redirect('/login'))
     return(render_template('categorias_criar.html'))
 
 @app.route('/categorias/salvar')
 def categorias_salvar():
+    if not acesso:
+        return(redirect('/login'))
     global categorias
     nome = str(request.args.get('nome'))
     categorias.append(nome)
@@ -76,12 +87,16 @@ def categorias_salvar():
 
 @app.route('/categorias/confirmar/<pos>')
 def categorias_confirmar(pos):
+    if not acesso:
+        return(redirect('/login'))
     pos = int(pos) + 1
     categoria = categorias[pos]
     return(render_template('categorias_confirmar.html', categoria = categoria, pos = pos))
 
 @app.route('/categorias/excluir/<pos>')
 def categorias_excluir(pos):
+    if not acesso:
+        return(redirect('/login'))
     global categorias
     global produtos
     pos = int(pos)
@@ -95,6 +110,8 @@ def categorias_excluir(pos):
 #produtos
 @app.route('/produtos')
 def produtos_page():
+    if not acesso:
+        return(redirect('/login'))
     produtos_filtro = []
     categoria = request.args.get('categoria')
     search = request.args.get('search')
@@ -111,14 +128,18 @@ def produtos_page():
                 if produto['codigo'] == search:
                     produtos_filtro.append(produto)
 
-    return(render_template('produtos.html', produtos=produtos_filtro, categorias=categorias))
+    return(render_template('produtos.html', produtos=produtos_filtro, categorias=categorias, adm=adm))
 
 @app.route('/produtos/criar')
 def produtos_criar():
+    if not acesso:
+        return(redirect('/login'))
     return(render_template('produtos_criar.html', categorias=categorias))
 
 @app.route('/produtos/salvar')
 def produtos_salvar():
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     nome = request.args.get('nome')
     preco_str = request.args.get('preco')
@@ -139,6 +160,8 @@ def produtos_salvar():
 
 @app.route('/produtos/editar/<code>')
 def produtos_editar(code):
+    if not acesso:
+        return(redirect('/login'))
     produto_edit = {}
     for produto in produtos:
         if produto['codigo'] == code:
@@ -154,6 +177,8 @@ def produtos_editar(code):
 
 @app.route('/produtos/editar/salvar/<code>')
 def produtos_editar_salvar(code):
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     nome = request.args.get('nome')
     preco_str = request.args.get('preco')
@@ -176,6 +201,8 @@ def produtos_editar_salvar(code):
 
 @app.route('/produtos/confirmar/<codigo>')
 def produtos_confirmar(codigo):
+    if not acesso:
+        return(redirect('/login'))
     nome = ''
     for produto in produtos:
         if produto['codigo'] == codigo:
@@ -195,6 +222,8 @@ def produtos_excluir(codigo):
 #estoque
 @app.route('/estoque')
 def estoque_page():
+    if not acesso:
+        return(redirect('/login'))
     produtos_filtro = []
     categoria = request.args.get('categoria')
     search = request.args.get('search')
@@ -211,10 +240,12 @@ def estoque_page():
                 if produto['codigo'] == search:
                     produtos_filtro.append(produto)
 
-    return(render_template('estoque.html', produtos=produtos_filtro, categorias=categorias))
+    return(render_template('estoque.html', produtos=produtos_filtro, categorias=categorias, adm=adm))
 
 @app.route('/estoque/diminuir/<codigo>')
 def estoque_diminuir(codigo):
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     escolha = {}
     for produto in produtos:
@@ -224,6 +255,8 @@ def estoque_diminuir(codigo):
 
 @app.route('/estoque/diminuir/salvar/<codigo>')
 def estoque_diminuir_salvar(codigo):
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     diminuir = int(request.args.get('diminuir'))
     for produto in produtos:
@@ -235,6 +268,8 @@ def estoque_diminuir_salvar(codigo):
 
 @app.route('/estoque/aumentar/<codigo>')
 def estoque_aumentar(codigo):
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     escolha = {}
     for produto in produtos:
@@ -244,6 +279,8 @@ def estoque_aumentar(codigo):
 
 @app.route('/estoque/aumentar/salvar/<codigo>')
 def estoque_aumentar_salvar(codigo):
+    if not acesso:
+        return(redirect('/login'))
     global produtos
     aumentar = int(request.args.get('aumentar'))
     for produto in produtos:
@@ -255,6 +292,8 @@ def estoque_aumentar_salvar(codigo):
 #relatórios
 #Criação e armazenamento de relatórios
 def registro_venda(produto, qtd_vendida):
+    if not acesso:
+        return(redirect('/login'))
     mes = datetime.now().strftime('%Y-%m')
     categoria = produto['categoria']
     nome = produto['nome']
@@ -279,6 +318,8 @@ def registro_venda(produto, qtd_vendida):
 #relatorios
 @app.route('/relatorios')
 def relatorios_page():
+    if not acesso:
+        return(redirect('/login'))
     mes_escolhido = request.args.get('mes_escolhido', 'atual')
     mes_atual = datetime.now().strftime('%Y-%m')
     if mes_escolhido == 'atual':
@@ -296,8 +337,38 @@ def relatorios_page():
         for produtos in relatorios_filtro.values()
         for dados in produtos.values()
     )
-    return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro, total = total_arrecadado))
+    return(render_template('relatorios.html', meses=meses_disponiveis, relatorio=relatorios_filtro, total = total_arrecadado, adm=adm))
 #fim relatorios
+#configurações
+@app.route('/config')
+def config_page():
+    return(render_template('config.html', usuarios=usuarios, adm=adm))
+
+@app.route('/config/excluir/<id>')
+def config_excluir(id):
+    global usuarios
+    id = int(id)
+    usuarios.pop(id)
+    return(redirect('/config'))
+
+@app.route('/config/criar')
+def config_criar():
+    ids_existentes = set(usuarios.keys())
+    while True:
+        id = randint(100000, 999999)
+        if id not in ids_existentes:
+            break
+    usuarios[id] = {"nome": "", "is_admin": False}
+    return(redirect('/config'))
+#fim configurações
+#sair
+@app.route('/sair')
+def sair():
+    global codigo, adm, acesso
+    codigo = 000000
+    adm = False
+    acesso = False
+    return(redirect('/'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)

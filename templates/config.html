@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='config/config.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script>
+        function confirmarExclusao(id) {
+            if (confirm("Tem certeza que deseja excluir este usuário?")) {
+                window.location.href = "/config/excluir/" + id;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Configurações</h1>
+    <a href="/sair"><span class="material-symbols-outlined">logout</span></a>
+
+    {% if adm %}
+        <a href="/config/criar"><span class="material-symbols-outlined">library_add</span></a>
+        <div id="form">
+            <main>
+                {% for id, usuario in usuarios.items() %}
+                    <div class="{% if usuario.is_admin %}adm{% endif %}">
+                        <p>{{ usuario.nome }}</p>
+                        <p>Código de acesso: {{ id }}</p>
+                        {% if not usuario.is_admin %}
+                            <a href="javascript:void(0);" onclick="confirmarExclusao('{{ id }}')">
+                                <span class="material-symbols-outlined">delete</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </main>
+        </div>
+    {% endif %}
+
+    <footer>
+        <a href="/categorias"><span class="material-symbols-outlined">category</span>Categorias</a>
+        <a href="/produtos?search=&categoria=todas"><span class="material-symbols-outlined">inventory_2</span>Produtos</a>
+        <a href="/estoque?search=&categoria=todas"><span class="material-symbols-outlined">list_alt</span>Estoque</a>
+        <a href="/relatorios"><span class="material-symbols-outlined">checklist</span>Relatórios</a>
+            <a href="/config" class="ativo"><span class="material-symbols-outlined">manufacturing</span>Config</a>
+    </footer>
+</body>
+</html>
