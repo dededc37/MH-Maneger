@@ -1,5 +1,6 @@
 from flask import *
 import os
+import json
 from datetime import datetime
 from random import randint
 from dados.usuarios import *
@@ -8,6 +9,71 @@ from dados.produtos import *
 from dados.relatorios import *
 
 app = Flask(__name__)
+#save
+
+# Funções de salvar e carregar para cada variável
+def salvar_usuarios():
+    with open("usuarios.txt", "w", encoding="utf-8") as arquivo:
+        json.dump(usuarios, arquivo, ensure_ascii=False, indent=4)
+
+def carregar_usuarios():
+    global usuarios
+    if os.path.exists("usuarios.txt"):
+        with open("usuarios.txt", "r", encoding="utf-8") as arquivo:
+            usuarios = json.load(arquivo)
+    else:
+        salvar_usuarios()
+
+def salvar_categorias():
+    with open("categorias.txt", "w", encoding="utf-8") as arquivo:
+        json.dump(categorias, arquivo, ensure_ascii=False, indent=4)
+
+def carregar_categorias():
+    global categorias
+    if os.path.exists("categorias.txt"):
+        with open("categorias.txt", "r", encoding="utf-8") as arquivo:
+            categorias = json.load(arquivo)
+    else:
+        salvar_categorias()
+
+def salvar_produtos():
+    with open("produtos.txt", "w", encoding="utf-8") as arquivo:
+        json.dump(produtos, arquivo, ensure_ascii=False, indent=4)
+
+def carregar_produtos():
+    global produtos
+    if os.path.exists("produtos.txt"):
+        with open("produtos.txt", "r", encoding="utf-8") as arquivo:
+            produtos = json.load(arquivo)
+    else:
+        salvar_produtos()
+
+def salvar_relatorios():
+    with open("relatorios.txt", "w", encoding="utf-8") as arquivo:
+        json.dump(relatorios, arquivo, ensure_ascii=False, indent=4)
+
+def carregar_relatorios():
+    global relatorios
+    if os.path.exists("relatorios.txt"):
+        with open("relatorios.txt", "r", encoding="utf-8") as arquivo:
+            relatorios = json.load(arquivo)
+    else:
+        salvar_relatorios()
+
+# Função geral para carregar todos os dados
+def carregar():
+    carregar_usuarios()
+    carregar_categorias()
+    carregar_produtos()
+    carregar_relatorios()
+
+# Função geral para salvar todos os dados
+def salvar():
+    salvar_usuarios()
+    salvar_categorias()
+    salvar_produtos()
+    salvar_relatorios()
+#fim save
 #Login
 acesso = False
 adm = False
@@ -15,6 +81,7 @@ codigo = 000000
 
 @app.route('/')
 def _():
+   carregar()
    if acesso:
         return(redirect('/home'))
    else:
@@ -22,6 +89,8 @@ def _():
 
 @app.route('/login')
 def login():
+    carregar()
+    print(usuarios)
     return(render_template('login.html'))
 
 @app.route('/login/code')
@@ -29,9 +98,11 @@ def login_code():
     global codigo
     global acesso
     global adm
-    codigo = int(request.args.get('codigo'))
+    codigo = str(request.args.get('codigo'))
+    print(codigo)
     if codigo in usuarios:
         acesso = True
+        print('batatatatatatatatatatatatatattttttttttttttt')
         if usuarios[codigo]['is_admin'] == True:
             adm = True
         if usuarios[codigo]["nome"] == '':
@@ -39,6 +110,7 @@ def login_code():
         else:
             return(redirect('/home'))
     else:
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         return(redirect('/login'))
     
 @app.route('/login/nome')
@@ -50,6 +122,7 @@ def cad_nome():
     global acesso
     nome = str(request.args.get('nome'))
     usuarios[codigo]["nome"] = nome
+    salvar_usuarios()
     return(redirect('/home'))
 #fim login
 
@@ -83,6 +156,7 @@ def categorias_salvar():
     global categorias
     nome = str(request.args.get('nome'))
     categorias.append(nome)
+    salvar_categorias()
     return(redirect('/categorias'))
 
 @app.route('/categorias/confirmar/<pos>')
@@ -104,6 +178,7 @@ def categorias_excluir(pos):
         if produto['categoria'] == categorias[pos]:
             produto['categoria'] = 'Sem Categoria'
     categorias.pop(pos)
+    salvar_categorias()
     return(redirect('/categorias'))
 #fim categorias
 
@@ -156,6 +231,7 @@ def produtos_salvar():
     }
 
     produtos.append(produto)
+    salvar_produtos()
     return(redirect('/produtos?search=&categoria=todas'))
 
 @app.route('/produtos/editar/<code>')
@@ -197,6 +273,7 @@ def produtos_editar_salvar(code):
             produto_novo['estoque'] = produto['estoque']
             produtos[pos] = produto_novo
             break
+    salvar_produtos()
     return(redirect('/produtos?search=&categoria=todas'))
 
 @app.route('/produtos/confirmar/<codigo>')
@@ -216,6 +293,7 @@ def produtos_excluir(codigo):
     for pos, produto in enumerate(produtos):
         if produto['codigo'] == codigo:
             produtos.pop(pos)
+    salvar_produtos()
     return(redirect('/produtos?search=&categoria=todas'))
 #fim produtos
 
@@ -264,6 +342,7 @@ def estoque_diminuir_salvar(codigo):
             produto['estoque'] -= diminuir
             registro_venda(produto=produto, qtd_vendida=diminuir)
             break
+    salvar_produtos()
     return(redirect('/estoque?search=&categoria=todas'))
 
 @app.route('/estoque/aumentar/<codigo>')
@@ -286,6 +365,7 @@ def estoque_aumentar_salvar(codigo):
     for produto in produtos:
         if produto['codigo'] == codigo:
             produto['estoque'] += aumentar
+    salvar_produtos()
     return(redirect('/estoque?search=&categoria=todas'))
 #fim estoque
 
@@ -314,6 +394,7 @@ def registro_venda(produto, qtd_vendida):
     
     relatorios[mes][categoria][nome]["unidades_vendidas"] += qtd_vendida
     relatorios[mes][categoria][nome]["valor_arrecadado"] += qtd_vendida * preco
+    salvar_relatorios()
 #fim criação e armazenamento de relatórios
 #relatorios
 @app.route('/relatorios')
@@ -349,6 +430,7 @@ def config_excluir(id):
     global usuarios
     id = int(id)
     usuarios.pop(id)
+    salvar_usuarios()
     return(redirect('/config'))
 
 @app.route('/config/criar')
@@ -359,6 +441,7 @@ def config_criar():
         if id not in ids_existentes:
             break
     usuarios[id] = {"nome": "", "is_admin": False}
+    salvar_usuarios()
     return(redirect('/config'))
 #fim configurações
 #sair
@@ -368,6 +451,7 @@ def sair():
     codigo = 000000
     adm = False
     acesso = False
+    salvar()
     return(redirect('/'))
 
 if __name__ == '__main__':
