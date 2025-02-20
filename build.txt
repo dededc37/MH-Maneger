@@ -1,0 +1,1 @@
+pyinstaller --onefile --add-data "templates;templates" --add-data "static;static" --add-data "dados;dados" --add-data "categorias.txt;." --add-data "produtos.txt;." --add-data "relatorios.txt;." --add-data "usuarios.txt;." app.py

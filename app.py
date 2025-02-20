@@ -1,5 +1,5 @@
 from flask import *
-import webbrowser
+import webview
 import os
 import json
 from datetime import datetime
@@ -10,6 +10,8 @@ from dados.produtos import *
 from dados.relatorios import *
 
 app = Flask(__name__)
+
+window = webview.create_window('MH_Maneger', app)
 #save
 
 # Funções de salvar e carregar para cada variável
@@ -91,7 +93,6 @@ def _():
 @app.route('/login')
 def login():
     carregar()
-    print(usuarios)
     return(render_template('login.html'))
 
 @app.route('/login/code')
@@ -100,10 +101,8 @@ def login_code():
     global acesso
     global adm
     codigo = str(request.args.get('codigo'))
-    print(codigo)
     if codigo in usuarios:
         acesso = True
-        print('batatatatatatatatatatatatatattttttttttttttt')
         if usuarios[codigo]['is_admin'] == True:
             adm = True
         if usuarios[codigo]["nome"] == '':
@@ -111,7 +110,6 @@ def login_code():
         else:
             return(redirect('/home'))
     else:
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         return(redirect('/login'))
     
 @app.route('/login/nome')
@@ -456,5 +454,4 @@ def sair():
     return(redirect('/'))
 
 if __name__ == '__main__':
-    webbrowser.open('http://127.0.0.1:5000')
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
+    webview.start()
