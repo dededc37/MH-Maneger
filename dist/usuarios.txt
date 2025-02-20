@@ -1,0 +1,6 @@
+{
+    "235741": {
+        "nome": "André Huber",
+        "is_admin": true
+    }
+}

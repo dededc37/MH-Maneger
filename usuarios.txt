@@ -2,5 +2,9 @@
     "235741": {
         "nome": "André Huber",
         "is_admin": true
+    },
+    "265051": {
+        "nome": "",
+        "is_admin": false
     }
 }
